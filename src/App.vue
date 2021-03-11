@@ -1,21 +1,30 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
 <script lang="ts">
-import {defineComponent} from '@vue/composition-api'
+import {defineComponent} from '@vue/composition-api';
 
 export default defineComponent({
-  setup(props){
-  }
-})
+  setup(props) {
+    const a = 1;
+
+    return {
+      a,
+    };
+  },
+});
 </script>
 <style>
+*,html,body{
+  margin: 0;
+  padding: 0;
+}
+a{
+  text-decoration:none;
+  color: #2c3e50;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
