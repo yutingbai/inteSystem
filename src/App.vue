@@ -45,4 +45,10 @@ a{
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+.inputBox > input{
+  border-radius: 15px;
+  border-color: #ea6f5a;
+  box-shadow: 0 0 5px #ccc;
+  font-size: 15px;
+}
 </style>

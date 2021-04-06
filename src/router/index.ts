@@ -45,9 +45,21 @@ const routes: RouteConfig[] = [
     ],
   },
   {
-    path: '/',
-    name: 'Home',
-    component: Home,
+    path: '/main',
+    name: 'main',
+    component: () => import('../views/user/index.vue'),
+    children: [
+      {
+        path: 'QA',
+        name: 'QA',
+        component: () => import('../components/user/QA.vue'),
+      },
+      {
+        path: 'store',
+        name: 'store',
+        component: () => import('../components/user/store.vue'),
+      },
+    ],
   },
   {
     path: '/about',

@@ -112,7 +112,6 @@ export default defineComponent({
   background-color: #fff;
   color: #333;
   text-align: center;
-  line-height: 160px;
   height: calc(100vh - 60px);
 }
 .el-menu {
