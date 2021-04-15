@@ -53,7 +53,7 @@ const routes: RouteConfig[] = [
   {
     path: '/main',
     name: 'main',
-    redirect:'/main/QA/recommend',
+    redirect:'/main/QA',
     component: () => import('../views/user/index.vue'),
     children: [
       {
@@ -75,11 +75,21 @@ const routes: RouteConfig[] = [
     component: () => import('../views/user/index.vue'),
     children: [
       {
+        path: 'setting',
+        name: 'setting',
+        component: () => import('../components/userDetail/userSet.vue'),
+      },
+      {
         path: 'center',
         name: 'center',
         component: () => import('../components/userDetail/userCenter.vue'),
       }
     ],
+  },
+  {
+    path: '/users/editor',
+    name: 'editor',
+    component: () => import('../components/'),
   },
   {
     path: '/about',

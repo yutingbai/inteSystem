@@ -14,14 +14,12 @@
     <el-container>
       <el-aside width="200px">
         <el-menu
-          :default-active="`/master/user`"
+          :default-active="'/master/users'"
+          :router="true"
           class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
           background-color="#001529"
           text-color="#fff"
           active-text-color="#ffd04b"
-          :router="true"
         >
           <el-menu-item index="/master/users">
             <i class="el-icon-user"></i>
@@ -31,12 +29,10 @@
             <i class="el-icon-document"></i>
             <span slot="title">问题管理</span>
           </el-menu-item>
-          <router-link to="/master/talk">
-            <el-menu-item index="3">
-              <i class="el-icon-chat-dot-round"></i>
-              <span slot="title">对话管理</span>
-            </el-menu-item>
-          </router-link>
+          <el-menu-item index="/master/talk">
+            <i class="el-icon-chat-dot-round"></i>
+            <span slot="title">对话管理</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>

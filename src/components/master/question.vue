@@ -62,7 +62,9 @@
           <el-button @click="handleClick(scope.row)" type="text" size="small"
             >查看</el-button
           >
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button type="text" size="small" @click.native.prevent="
+              deleteRow(scope.$index, tableData, scope.row.id)
+            ">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,6 +73,7 @@
   </div>
 </template>
 <script lang="ts">
+import getCurrentInstance  from "vue";
 import { defineComponent, ref } from "@vue/composition-api";
 import moment from "moment";
 import "default-passive-events";
@@ -78,6 +81,7 @@ import API from "../../service/api";
 
 export default defineComponent({
   setup() {
+    const  _this  = new getCurrentInstance();
     const formInline = {
       userID: "",
       userName: "",
@@ -91,10 +95,22 @@ export default defineComponent({
         // this.$message.error("账户名或密码错误");
       }
     });
+    function deleteRow(index: any, rows: any[], id: any) {
+      API.Deletepost({id:id}).then((res: any) => {
+        console.log(res);
+        if (res.status == 0) {
+          _this.$message({ message: "删除成功", type: "success" });
+        } else {
+          _this.$message.error("删除失败");
+        }
+      });
+      rows.splice(index, 1);
+    }
     return {
       tableData,
       formInline,
       moment,
+      deleteRow
     };
   },
 });

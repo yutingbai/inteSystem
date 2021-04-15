@@ -68,7 +68,12 @@ export default {
             console.log(res);
             if (res.status == 0) {
               this.$message({ message: "登陆成功", type: "success" });
-              this.$router.push("/master/users");
+              if(res.data.user_status === 1){
+                this.$router.push("/master/users");
+              }else{
+                this.$router.push("/");
+              }
+              
             } else {
               this.$message.error("账户名或密码错误");
             }

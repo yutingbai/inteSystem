@@ -27,5 +27,10 @@ API.Postslist = () => {
 API.Deletepost = (params) => {
   return post(`admin/Deletepost`, params)
 }
- 
+API.editImg = (id,file)=>{
+  return postJson(`/users/editImg?user_id=${id}` , file)
+}
+API.userInfo = (params)=>{
+  return get(`/users/userInfo?`,params)
+}
 export default API

@@ -2,7 +2,7 @@
   <div class="outBox">
     <div class="header">
       <div class="titleBox">
-        <router-link tag="div" to="/main/QA">
+        <router-link tag="div" to="/main/QA/recommend">
           <svg
             t="1568036554935"
             class="icon"
@@ -137,7 +137,7 @@
               />
             </svg>
           </div>
-          <router-link tag="div" to="/users/resive" class="revise">
+          <router-link tag="div" to="/user/setting" class="revise">
             修改信息
             <svg
               t="1568637090982"
@@ -187,15 +187,12 @@ export default {
   //   this.userId = window.localStorage.getItem("userId");
   //   // console.log(this.userHead,this.userId)
   // },
-  // methods: {
-  //   handleToLogout() {
-  //     document.cookie = " ";
-  //     localStorage.removeItem("name");
-  //     localStorage.removeItem("userHead");
-  //     localStorage.removeItem("userId");
-  //     this.$router.push("/users/login");
-  //   },
-  // },
+  methods: {
+    handleToLogout() {
+      document.cookie = " ";
+      this.$router.push("/join/login");
+    },
+  },
 };
 </script>
 <style lang='less' scoped>
