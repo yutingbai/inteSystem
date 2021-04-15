@@ -2,25 +2,21 @@
   <div class="qapage">
     <div class="left">
       <el-menu
-        type="primary"
-        :default-active="1"
+        :default-active="'/main/QA/recommend'"
         class="el-menu-demo"
         mode="horizontal"
-        @select="handleSelect"
+        :router="true"
       >
-        <el-menu-item index="1">推荐</el-menu-item>
-        <el-menu-item index="2">关注</el-menu-item>
+        <el-menu-item index="/main/QA/recommend">推荐</el-menu-item>
+        <el-menu-item index="/main/QA/follow">关注</el-menu-item>
       </el-menu>
+
       <div class="content">
-        <div v-for="i in 5" :key="i"><Card/></div>
-       
+        <div v-for="i in 5" :key="i"><Card /></div>
       </div>
     </div>
     <div class="right">
-      <el-menu
-        class="el-menu-demo"
-        mode="horizontal"
-      >
+      <el-menu class="el-menu-demo" mode="horizontal">
         <el-menu-item index="1">热门词条</el-menu-item>
       </el-menu>
     </div>
@@ -28,16 +24,23 @@
   </div>
 </template>
 <script>
-import { defineComponent } from '@vue/composition-api'
-import Card from '../card/index.vue'
+import { defineComponent } from "@vue/composition-api";
+import { getCurrentInstance } from "vue";
+import Card from "../card/index.vue";
 export default defineComponent({
-    components:{
-        Card
-    },
-    setup() {
-        
-    },
-})
+  components: {
+    Card,
+  },
+  setup() {
+    console.log(getCurrentInstance().$router)
+    const activeObj = { follow: 1, recommend: 2 };
+    const Vthis = getCurrentInstance();
+
+    return {
+      activeObj,
+    };
+  },
+});
 </script>
 
 <style lang="less" scoped>

@@ -93,7 +93,7 @@
         </router-link>
       </div>
       <div class="imgBox">
-        <router-link tag="div" to="/users">
+        <router-link tag="div" to="/user">
           <img v-if="userHead" :src="userHead" alt="用户头像" />
           <svg
             v-else

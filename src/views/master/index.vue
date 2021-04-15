@@ -2,9 +2,7 @@
   <el-container>
     <el-header>
       <div>
-        <div class="title">
-          管理系统
-        </div>
+        <div class="title">管理系统</div>
         <div class="iconBox user">
           <i class="el-icon-user"></i>
         </div>
@@ -16,26 +14,23 @@
     <el-container>
       <el-aside width="200px">
         <el-menu
-          default-active="1"
+          :default-active="`/master/user`"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
           background-color="#001529"
           text-color="#fff"
           active-text-color="#ffd04b"
+          :router="true"
         >
-          <router-link to="/master/users">
-            <el-menu-item index="1">
-              <i class="el-icon-user"></i>
-              <span slot="title">学生管理</span>
-            </el-menu-item>
-          </router-link>
-          <router-link to="/master/questions">
-            <el-menu-item index="2">
-              <i class="el-icon-document"></i>
-              <span slot="title">问题管理</span>
-            </el-menu-item>
-          </router-link>
+          <el-menu-item index="/master/users">
+            <i class="el-icon-user"></i>
+            <span slot="title">学生管理</span>
+          </el-menu-item>
+          <el-menu-item index="/master/questions">
+            <i class="el-icon-document"></i>
+            <span slot="title">问题管理</span>
+          </el-menu-item>
           <router-link to="/master/talk">
             <el-menu-item index="3">
               <i class="el-icon-chat-dot-round"></i>
@@ -51,9 +46,9 @@
   </el-container>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref } from "@vue/composition-api";
 export default defineComponent({
-  name: 'master',
+  name: "master",
   setup(props) {
     const handleOpen = (key: any, keyPath: any) => {
       console.log(key, keyPath);
@@ -79,13 +74,13 @@ export default defineComponent({
     width: 100%;
     height: 55px;
     box-shadow: 0 0 5px rgba(30, 50, 30, 0.3);
-    .title{
+    .title {
       background-color: #001529;
       color: #fff;
       text-align: center;
       width: 200px;
       float: left;
-      font-family: "Microsoft YaHei","微软雅黑",Arial,sans-serif;
+      font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
       font-size: 20px;
     }
     .iconBox {

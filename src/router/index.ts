@@ -6,8 +6,13 @@ Vue.use(VueRouter);
 
 const routes: RouteConfig[] = [
   {
+    path: '/',
+    redirect:'/main/QA/recommend'
+  },
+  {
     path: '/join',
     name: 'join',
+    redirect:'/join/login',
     component: () => import(/* webpackChunkName: "about" */ '../views/public/join.vue'),
     children: [
       {
@@ -25,6 +30,7 @@ const routes: RouteConfig[] = [
   {
     path: '/master',
     name: 'master',
+    redirect:'/master/users',
     component: () => import('../views/master/index.vue'),
     children: [
       {
@@ -47,10 +53,11 @@ const routes: RouteConfig[] = [
   {
     path: '/main',
     name: 'main',
+    redirect:'/main/QA/recommend',
     component: () => import('../views/user/index.vue'),
     children: [
       {
-        path: 'QA',
+        path: 'QA/:id',
         name: 'QA',
         component: () => import('../components/user/QA.vue'),
       },
@@ -59,6 +66,19 @@ const routes: RouteConfig[] = [
         name: 'store',
         component: () => import('../components/user/store.vue'),
       },
+    ],
+  },
+  {
+    path: '/user',
+    name: 'user',
+    redirect:'/user/center',
+    component: () => import('../views/user/index.vue'),
+    children: [
+      {
+        path: 'center',
+        name: 'center',
+        component: () => import('../components/userDetail/userCenter.vue'),
+      }
     ],
   },
   {
