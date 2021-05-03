@@ -7,12 +7,12 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
   {
     path: '/',
-    redirect:'/main/QA/recommend'
+    redirect: '/main/QA/recommend',
   },
   {
     path: '/join',
     name: 'join',
-    redirect:'/join/login',
+    redirect: '/join/login',
     component: () => import(/* webpackChunkName: "about" */ '../views/public/join.vue'),
     children: [
       {
@@ -30,7 +30,7 @@ const routes: RouteConfig[] = [
   {
     path: '/master',
     name: 'master',
-    redirect:'/master/users',
+    redirect: '/master/users',
     component: () => import('../views/master/index.vue'),
     children: [
       {
@@ -53,7 +53,7 @@ const routes: RouteConfig[] = [
   {
     path: '/main',
     name: 'main',
-    redirect:'/main/QA',
+    redirect: '/main/QA',
     component: () => import('../views/user/index.vue'),
     children: [
       {
@@ -71,7 +71,7 @@ const routes: RouteConfig[] = [
   {
     path: '/user',
     name: 'user',
-    redirect:'/user/center',
+    redirect: '/user/center',
     component: () => import('../views/user/index.vue'),
     children: [
       {
@@ -83,13 +83,13 @@ const routes: RouteConfig[] = [
         path: 'center',
         name: 'center',
         component: () => import('../components/userDetail/userCenter.vue'),
-      }
+      },
     ],
   },
   {
     path: '/users/editor',
     name: 'editor',
-    component: () => import('../components/'),
+    component: () => import('../components/editor/index.vue'),
   },
   {
     path: '/about',

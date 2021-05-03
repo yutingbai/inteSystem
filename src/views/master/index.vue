@@ -42,9 +42,9 @@
   </el-container>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "@vue/composition-api";
+import { defineComponent, ref } from '@vue/composition-api';
 export default defineComponent({
-  name: "master",
+  name: 'master',
   setup(props) {
     const handleOpen = (key: any, keyPath: any) => {
       console.log(key, keyPath);

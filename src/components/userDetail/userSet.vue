@@ -156,7 +156,8 @@ export default {
       param.append("file", file);
       console.log(param);
       API.editImg(13, param).then((res) => {
-        if (res.code == 0) {
+        if (res.code == 200) {
+          this.user.user_pic=res.url
           this.$message({ message: "上传成功", type: "success" });
         } else {
           this.$message.error("上传失败" + res.errmsg);

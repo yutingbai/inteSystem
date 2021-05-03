@@ -51,9 +51,9 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="100">
         <template #default="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small"
-            >查看</el-button
-          >
+          <!-- <el-button @click="handleClick(scope.row)" type="text" size="small"
+            ></el-button
+          > -->
           <el-button
             type="text"
             size="small"
@@ -70,18 +70,18 @@
   </div>
 </template>
 <script lang="ts">
-import getCurrentInstance  from "vue";
-import { defineComponent, ref } from "@vue/composition-api";
-import moment from "moment";
-import "default-passive-events";
-import API from "../../service/api";
+import getCurrentInstance  from 'vue';
+import { defineComponent, ref } from '@vue/composition-api';
+import moment from 'moment';
+import 'default-passive-events';
+import API from '../../service/api';
 
 export default defineComponent({
   setup() {
     const  _this  = new getCurrentInstance();
     const formInline = {
-      userID: "",
-      userName: "",
+      userID: '',
+      userName: '',
     };
     const tableData = ref([]);
     API.UsersList().then((res: any) => {
@@ -93,12 +93,12 @@ export default defineComponent({
       }
     });
     function deleteRow(index: any, rows: any[], id: any) {
-      API.DeleteUser({userId:id}).then((res: any) => {
+      API.DeleteUser({userId: id}).then((res: any) => {
         console.log(res);
         if (res.status == 0) {
-          _this.$message({ message: "删除成功", type: "success" });
+          _this.$message({ message: '删除成功', type: 'success' });
         } else {
-          _this.$message.error("删除失败");
+          _this.$message.error('删除失败');
         }
       });
       rows.splice(index, 1);

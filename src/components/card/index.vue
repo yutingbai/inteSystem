@@ -1,17 +1,17 @@
 <template>
   <div class="card">
     <div class="titleBox">
-      <span>数据结构(计算机存储、组织数据方式) - 百度百科</span>
+      <span>{{item.title}}</span>
     </div>
     <div class="wordBox">
       <div class="imgBox">
         <img
-          src="https://img-blog.csdn.net/20180903194901687?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3lleWF6aGlzaGFuZw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70"
+          :src="item.pic"
           alt="文章配图"
         />
       </div>
       <span>
-        数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。
+       {{item.details}}
       </span>
     </div>
 
@@ -29,11 +29,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'card',
-};
+<script lang="ts">
+import { defineComponent , ref } from '@vue/composition-api';
+import getCurrentInstance  from 'vue';
+import API from '../../service/api';
+
+export default defineComponent({
+  props: [
+    'item',
+  ],
+  setup(props) {
+    console.log(props);
+    return {
+    };
+  },
+});
 </script>
+
 
 <style lang="less" scoped>
 .card {
@@ -71,8 +83,11 @@ export default {
   margin-left: 5%;
   font-weight: bold;
   margin-top: 10px;
+  width: 100%;
+  text-align: left;
 }
 .wordBox {
+  width: 100%;
   margin-top: 10px;
   margin-left: 5%;
   float: left;

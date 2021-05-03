@@ -4,11 +4,11 @@
       <div>
         <el-card class="headbox" shadow="hover">
           <div class="main-top">
-            <a class="avatar" href="/#/users">
+            <a class="avatar" href="/#/user/setting">
               <img class="imgCercle" :src="user.user_pic" alt="用户头像" />
             </a>
             <div class="title">
-              <a class="name" href="/#/users">{{user.user_name}}</a>
+              <a class="name" href="/#/user/setting">{{user.user_name}}</a>
             </div>
             <div class="info">
               <ul>

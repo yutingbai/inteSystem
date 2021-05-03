@@ -12,32 +12,55 @@
       </el-menu>
 
       <div class="content">
-        <div v-for="i in 5" :key="i"><Card /></div>
+        <div v-for="item in tableData" :key="item.id">
+          <Card :item="item" />
+        </div>
       </div>
     </div>
     <div class="right">
       <el-menu class="el-menu-demo" mode="horizontal">
         <el-menu-item index="1">热门词条</el-menu-item>
       </el-menu>
+      <el-button
+        type="primary"
+        plain
+        v-for="item in keywordList"
+        :key="item.id"
+      >
+        {{ item.keyword }}
+        <i>{{ item.hot }}</i>
+      </el-button>
     </div>
-    <div></div>
   </div>
 </template>
-<script>
-import { defineComponent } from "@vue/composition-api";
-import { getCurrentInstance } from "vue";
-import Card from "../card/index.vue";
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
+import getCurrentInstance from 'vue';
+import Card from '../card/index.vue';
+import API from '../../service/api';
 export default defineComponent({
   components: {
     Card,
   },
   setup() {
-    console.log(getCurrentInstance().$router)
-    const activeObj = { follow: 1, recommend: 2 };
-    const Vthis = getCurrentInstance();
+    const _this = new getCurrentInstance();
 
+    const tableData = ref([]);
+    API.Postslist().then((res: any) => {
+      console.log(res);
+      if (res.status == 0) {
+        tableData.value = res.data;
+      } else {
+        _this.$message.error('错误');
+      }
+    });
+    const keywordList = ref([]);
+    API.keyword({ num: 6 }).then((res: any) => {
+      keywordList.value = res.data;
+    });
     return {
-      activeObj,
+      tableData,
+      keywordList,
     };
   },
 });

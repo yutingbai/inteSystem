@@ -33,4 +33,15 @@ API.editImg = (id,file)=>{
 API.userInfo = (params)=>{
   return get(`/users/userInfo?`,params)
 }
+
+API.postProject=(params)=>{
+  return post('/users/publish',params)
+}
+API.editMoreImg = (file)=>{
+  return postJson('/users/editMoreImg' , file)
+}
+
+API.keyword=(params)=>{
+  return get('/users/keyword',params)
+}
 export default API

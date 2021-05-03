@@ -167,7 +167,7 @@ export default {
             console.log(res);
             if (res.status == 0) {
               this.$message({ message: "注册成功", type: "success" });
-              this.$router.push("/users/login");
+              this.$router.push("/join/login");
             } else {
               this.$message.error("注册失败" + res.msg);
             }

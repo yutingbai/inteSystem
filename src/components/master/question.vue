@@ -18,9 +18,39 @@
       border
       :data="tableData"
       style="width: 100%"
-    >
-      <el-table-column prop="id" sortable label="问题ID"> </el-table-column
-      ><el-table-column
+    ><el-table-column type="expand">
+        <template #default="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="创建时间">
+              <div>{{moment( props.row.create_time).format('YYYY-MM-DD') }}</div>
+            </el-form-item>
+            <el-form-item label="标题">
+              <div>{{ props.row.title }}</div>
+            </el-form-item>
+            <el-form-item label="问题详情">
+              <div>{{ props.row.details }}</div>
+            </el-form-item>
+            <el-form-item label="问题 ID">
+              <div>{{ props.row.id }}</div>
+            </el-form-item>
+            <el-form-item label="热度">
+              <div>{{ props.row.hot }}</div>
+            </el-form-item>
+            <el-form-item label="关键词">
+              <div>{{ props.row.keyword }}</div>
+            </el-form-item>
+            <el-form-item label="问题配图">
+              <div>{{ props.row.pic }}</div>
+            </el-form-item>
+            <el-form-item label="解决状态">
+              <div>{{ props.row.resolve == 0 ? '未解决':'已解决'  }}</div>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column prop="id" sortable label="问题ID"> </el-table-column>
+      
+      <el-table-column
         prop="create_time"
         label="日期"
         :formatter="
@@ -56,15 +86,18 @@
       prop="user_id"
       label="提问人"
       >
-    </el-table-column> --> 
+    </el-table-column> -->
       <el-table-column fixed="right" label="操作" width="100">
         <template #default="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small"
-            >查看</el-button
-          >
-          <el-button type="text" size="small" @click.native.prevent="
+          
+          <el-button
+            type="text"
+            size="small"
+            @click.native.prevent="
               deleteRow(scope.$index, tableData, scope.row.id)
-            ">删除</el-button>
+            "
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -73,18 +106,18 @@
   </div>
 </template>
 <script lang="ts">
-import getCurrentInstance  from "vue";
-import { defineComponent, ref } from "@vue/composition-api";
-import moment from "moment";
-import "default-passive-events";
-import API from "../../service/api";
+import getCurrentInstance from 'vue';
+import { defineComponent, ref } from '@vue/composition-api';
+import moment from 'moment';
+import 'default-passive-events';
+import API from '../../service/api';
 
 export default defineComponent({
   setup() {
-    const  _this  = new getCurrentInstance();
+    const _this = new getCurrentInstance();
     const formInline = {
-      userID: "",
-      userName: "",
+      userID: '',
+      userName: '',
     };
     const tableData = ref([]);
     API.Postslist().then((res: any) => {
@@ -96,12 +129,12 @@ export default defineComponent({
       }
     });
     function deleteRow(index: any, rows: any[], id: any) {
-      API.Deletepost({id:id}).then((res: any) => {
+      API.Deletepost({ id }).then((res: any) => {
         console.log(res);
         if (res.status == 0) {
-          _this.$message({ message: "删除成功", type: "success" });
+          _this.$message({ message: '删除成功', type: 'success' });
         } else {
-          _this.$message.error("删除失败");
+          _this.$message.error('删除失败');
         }
       });
       rows.splice(index, 1);
@@ -110,12 +143,13 @@ export default defineComponent({
       tableData,
       formInline,
       moment,
-      deleteRow
+      deleteRow,
     };
   },
 });
 </script>
 <style lang="less" scoped>
+
 .form {
   float: left;
 }

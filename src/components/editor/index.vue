@@ -1,7 +1,7 @@
 <template>
   <div id="main" class="main">
     <div class="btnbox">
-      <router-link tag="div" to="/users" class="btn">
+      <router-link tag="div" to="/" class="btn">
         回到个人主页
         <svg
           v-if="1"
@@ -26,39 +26,7 @@
           />
         </svg>
       </router-link>
-      <div class="detailBox">
-        <div>
-          <svg
-            t="1568119124307"
-            class="icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="1333"
-            width="200"
-            height="200"
-          >
-            <path
-              d="M984.293767 435.610686 590.464452 435.610686 590.464452 41.78318l-157.531364 0 0 393.827505L39.105583 435.610686l0 157.531364 393.827505 0 0 393.831124 157.531364 0L590.464452 593.142049l393.829314 0L984.293767 435.610686z"
-              p-id="1334"
-              fill="#f2f2f2"
-            />
-          </svg>选择类型
-        </div>
-        <div class="father">
-          问答
-          <router-link
-            tag="div"
-            to="/users/editor/board=QUESTION&classification=产品测试"
-            class="classFic"
-          >提问</router-link>
-          <router-link
-            tag="div"
-            to="/users/editor/board=QUESTION&classification=产品运营"
-            class="classFic"
-          >分享</router-link>
-        </div>
-      </div>
+
       <div class="btn btnpost" @click="handleToPOST">
         发布这篇文章
         <svg
@@ -115,27 +83,28 @@ export default {
       doc: "",
       isFirst: false,
       title: "",
+      userID: "",
+      pic:"",
       // postId: "false"
-      formdata: new FormData()
+      formdata: new FormData(),
     };
   },
   computed: {
-    ...mapGetters(["userName", "userId", "userHead"])
+    ...mapGetters(["userName", "userId", "userHead"]),
   },
   beforeRouteEnter(to, from, next) {
     let cookie = document.cookie.split(";");
     var res = {};
-    cookie.forEach(item => {
+    cookie.forEach((item) => {
       var result = item.split("=");
       if (result[0] && result[1]) {
         res[result[0].trim()] = result[1].trim();
       }
     });
-    console.log(res.userId);
-    if (res.userId) {
+    if (res.userid) {
       next();
     } else {
-      next({ path: "/users/login" });
+      next({ path: "/join/login" });
     }
   },
   methods: {
@@ -144,10 +113,11 @@ export default {
       // 第一步.将图片上传到服务器.
       var param = new FormData();
       param.append("file", $file);
-      API.postphoto(param).then(res => {
+      API.editMoreImg(param).then((res) => {
         // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
         // $vm.$img2Url 详情见本页末尾
         this.$refs.md.$img2Url(pos, res.data);
+        this.pic=res.data
       });
     },
     $imgDel(pos) {
@@ -155,57 +125,34 @@ export default {
     },
     handleToPOST() {
       // console.log(this.formdata.get('image'))
-      var This = this;
-      var str = new String(this.$route.path);
-      var reg = /\=+|\&/g;
-      var board = str.split(reg)[1];
-      var classification = str.split(reg)[3];
-      var userId = window.localStorage.getItem("userId");
-      // console.log(board,classification)
-      if (!board) {
-        alert("请先选择文章类型！");
-      } else if (this.title == "") {
-        alert("请输入文章标题!");
-      } else if (board == "PROJECT") {
-        var html = this.$refs.md.d_render;
-        var formData = new FormData();
-        formData.append("userId", userId);
-        formData.append("projectContent", html);
-        formData.append("label", "暂无");
-        formData.append("type", classification);
-        formData.append("title", this.title);
-        API.postProject(formData).then(res => {
-          if (res.data.code == 0) {
-            alert("发布成功");
-            this.$router.push("/post");
-          } else {
-            this.$message.error(res.errmsg);
-          }
-        });
-      } else {
-        // console.log(this.title)
-        var html = this.$refs.md.d_render;
-        var formData = new FormData();
-        formData.append("userId", this.userId);
-        formData.append("content", this.doc);
-        formData.append("board", board);
-        formData.append("classification", classification);
-        formData.append("title", this.title);
+      let cookie = document.cookie.split(";");
+      var res = {};
+      cookie.forEach((item) => {
+        var result = item.split("=");
+        if (result[0] && result[1]) {
+          res[result[0].trim()] = result[1].trim();
+        }
+      });
+      this.userID = res.userid;
 
-        API.postPage(formData).then(res => {
-          if (res.code == 0) {
-            alert("发布成功");
-            this.$router.push("/post");
-          } else {
-            alert(res.data.errmsg);
-          }
-        });
-      }
-    }
-  }
+      API.postProject({
+        user_id: this.userID,
+        details: this.doc,
+        title: this.title,
+        pic:this.pic
+      }).then((res) => {
+        if (res.code == 200) {
+          this.$message.success("发布成功");
+          this.$router.push("/");
+        } else {
+          this.$message.error(res.data.errmsg);
+        }
+      });
+    },
+  },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .main {
   position: absolute;
   top: 0;
