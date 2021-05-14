@@ -20,6 +20,7 @@ export default defineComponent({
 *,html,body{
   margin: 0;
   padding: 0;
+  
 }
 a{
   text-decoration:none;
@@ -31,6 +32,7 @@ a{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: rgb(255, 250, 244);
 }
 
 #nav {

@@ -56,7 +56,7 @@ import API from "@/service/api";
 
 export default {
   name: "users",
-  inject: ["reload"],
+  // inject: ["reload"],
   components: {},
   provide: function() {
     return {
@@ -118,7 +118,7 @@ export default {
       }
     });
     console.log(cookie,res)
-    if (res.userid) {
+    if (res.userid && res.username) {
       next();
     } else {
       next({ path: "/join/login" });

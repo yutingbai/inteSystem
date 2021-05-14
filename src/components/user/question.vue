@@ -2,15 +2,13 @@
   <div class="qapage">
     <div class="left">
       <el-menu
-        :default-active="'/main/QA/recommend'"
+        default-active="1"
         class="el-menu-demo"
         mode="horizontal"
         :router="true"
       >
-        <el-menu-item index="/main/QA/recommend">推荐</el-menu-item>
-        <el-menu-item index="/main/QA/follow">关注</el-menu-item>
+        <el-menu-item index="1">搜索结果</el-menu-item>
       </el-menu>
-
       <div class="content">
         <div v-for="item in tableData" :key="item.id">
           <Card :item="item" />
@@ -21,7 +19,7 @@
       <el-menu class="el-menu-demo" mode="horizontal" default-active="1">
         <el-menu-item index="1">热门词条</el-menu-item>
       </el-menu>
-     <router-link
+      <router-link
       tag="el-button"
         type="primary"
         plain
@@ -36,10 +34,11 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref, watch, watchEffect } from '@vue/composition-api';
 import getCurrentInstance from 'vue';
 import Card from '../card/index.vue';
 import API from '../../service/api';
+import { Route } from 'vue-router';
 export default defineComponent({
   components: {
     Card,
@@ -50,17 +49,20 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const _this = new getCurrentInstance();
-    console.log(props);
+    const myThis = new getCurrentInstance();
+
     const tableData = ref([]);
-    API.Postslist().then((res: any) => {
-      console.log(res);
-      if (res.status == 0) {
-        tableData.value = res.data;
-      } else {
-        _this.$message.error('错误');
-      }
+    const count = ref(props.query);
+    watchEffect(async () => {
+      API.searchPost({ data: props.query }).then((res: any) => {
+        if (res.status === 0) {
+          tableData.value = res.data;
+        } else {
+          myThis.$message.error(res.msg);
+        }
+      });
     });
+
     const keywordList = ref([]);
     API.keyword({ num: 6 }).then((res: any) => {
       keywordList.value = res.data;
@@ -70,7 +72,6 @@ export default defineComponent({
       keywordList,
     };
   },
-
 });
 </script>
 
@@ -94,6 +95,7 @@ export default defineComponent({
   border-left: 1px solid rgb(253, 226, 226);
 }
 .content {
+  margin-top: 10px;
   height: calc(100% - 60px);
   overflow: scroll;
 }
@@ -101,3 +103,4 @@ export default defineComponent({
   display: none;
 }
 </style>
+

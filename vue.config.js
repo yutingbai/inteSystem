@@ -1,6 +1,11 @@
 module.exports = {
+  lintOnSave:false,
   devServer: {
-    // hot: true,
+    overlay:{
+           warning:false,
+           errors:false
+       },
+    hot: true,
     clientLogLevel: 'warning',
     proxy: {
       '/inte': { 

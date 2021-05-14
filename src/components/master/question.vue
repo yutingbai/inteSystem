@@ -114,7 +114,7 @@ import API from '../../service/api';
 
 export default defineComponent({
   setup() {
-    const _this = new getCurrentInstance();
+    const myThis = new getCurrentInstance();
     const formInline = {
       userID: '',
       userName: '',
@@ -122,7 +122,7 @@ export default defineComponent({
     const tableData = ref([]);
     API.Postslist().then((res: any) => {
       console.log(res);
-      if (res.status == 0) {
+      if (res.status === 0) {
         tableData.value = res.data;
       } else {
         // this.$message.error("账户名或密码错误");
@@ -131,10 +131,10 @@ export default defineComponent({
     function deleteRow(index: any, rows: any[], id: any) {
       API.Deletepost({ id }).then((res: any) => {
         console.log(res);
-        if (res.status == 0) {
-          _this.$message({ message: '删除成功', type: 'success' });
+        if (res.status === 0) {
+          myThis.$message({ message: '删除成功', type: 'success' });
         } else {
-          _this.$message.error('删除失败');
+          myThis.$message.error('删除失败');
         }
       });
       rows.splice(index, 1);

@@ -67,6 +67,7 @@ export default {
           API.Login(Object.assign(this.ruleForm)).then((res) => {
             console.log(res);
             if (res.status == 0) {
+               this.$store.commit("SET_USERMSG", {userName: res.data.user_name,userHead: res.data.user_pic,userId:res.data.user_id });
               this.$message({ message: "登陆成功", type: "success" });
               if(res.data.user_status === 1){
                 this.$router.push("/master/users");

@@ -154,8 +154,8 @@ export default {
       var file = ev.target.files[0];
       var param = new FormData();
       param.append("file", file);
-      console.log(param);
-      API.editImg(13, param).then((res) => {
+      console.log(param , this);
+      API.editImg(this.user.user_id, param).then((res) => {
         if (res.code == 200) {
           this.user.user_pic=res.url
           this.$message({ message: "上传成功", type: "success" });

@@ -38,16 +38,18 @@
             /></svg
           >知识库
         </router-link>
-        
-        <el-input
-         size="small"
+
+        <el-autocomplete
+          size="small"
           class="inputBox"
+          v-model="state"
+          :fetch-suggestions="querySearchAsync"
           placeholder="请输入你的问题"
           prefix-icon="el-icon-search"
-          v-model="input"
-        >
-        </el-input>
-        
+          @select="handleSelect"
+          select-when-unmatched
+        ></el-autocomplete>
+
         <router-link tag="div" class="write" to="/users/editor">
           <svg
             t="1568037095906"
@@ -118,7 +120,7 @@
             />
           </svg>
 
-          <div class="logOut" @click="handleToLogout">
+          <div class="logOut" @click.prevent="handleToLogout">
             退出登录
             <svg
               t="1568468520425"
@@ -166,38 +168,78 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: "header",
+<script lang='js'>
+import { defineComponent, ref,onMounted,computed } from '@vue/composition-api';
+import { VueRouter } from "vue-router";
+import API from "../../service/api";
+import store from "../../store";
+export default defineComponent({
+  name: "Header",
   setup() {
     const name = "";
-    const userHeader = "";
+    const userHead = store.state.userHead;
     const userId = "";
     const input = "";
+    const keyWords = ref([]);
+    const loadAll =() => {
+      return API.postTitle()
+    };
+    console.log(document.cookie)
+    let timeout;
+    const querySearchAsync = (queryString, cb) => {
+      var results = queryString
+        ? keyWords.value.filter(createFilter(queryString))
+        : keyWords.value;
+
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        cb(results);
+      }, 3000 * Math.random());
+    };
+    const createFilter = (queryString) => {
+      return (key) => {
+        console.log( key.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0);
+        return (
+          key.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    };
+   
+    onMounted(async () => {
+      keyWords.value =(await loadAll()).data;
+      console.log(keyWords)
+    });
     return {
       name,
-      userHeader,
+      userHead,
       userId,
       input,
+
+      keyWords,
+      state: ref(''),
+      querySearchAsync,
+      createFilter,
+      loadAll,
     };
   },
-  // mounted() {
-  //   (this.userHead = window.localStorage.getItem("userHead")),
-  //     (this.name = window.localStorage.getItem("name"));
-  //   this.userId = window.localStorage.getItem("userId");
-  //   // console.log(this.userHead,this.userId)
-  // },
-  methods: {
+   methods: {
     handleToLogout() {
-      document.cookie = " ";
+      this.$store.commit("LOGOUT");
+      API.logOut().then((res) => {item
+            console.log(res);})
       this.$router.push("/join/login");
     },
+    handleSelect(item){
+      this.$router.push({path:`/main/QA`,query:{data:item.value}});
+    }
   },
-};
+});
 </script>
 <style lang='less' scoped>
 .outBox {
-  background: #fff;
+  background: rgb(255, 250, 244);
   position: relative;
   top: 0px;
   left: 0px;
@@ -205,9 +247,11 @@ export default {
   width: 100%;
   /* border: 1px solid black; */
 }
-.inputBox{
-  width: 280px !important; 
+.inputBox {
+  width: 280px !important;
   border-radius: 15%;
+  border-radius: 15px;
+    border-color: #ea6f5a;
   // overflow: hidden;
 }
 .header {
@@ -215,6 +259,7 @@ export default {
   width: 95%;
   min-width: 1040px;
   border-radius: 5px;
+  background-color: #fff;
   box-shadow: 0 0 5px #ccc;
   position: absolute;
   top: 10px;

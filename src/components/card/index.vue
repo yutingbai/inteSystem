@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="titleBox">
+    <div class="titleBox" @click.prevent="pushRoute(item.id)">
       <span>{{item.title}}</span>
     </div>
     <div class="wordBox">
@@ -18,32 +18,44 @@
     <div class="iBox">
       <span>
         <i class="el-icon-thumb"></i>
+        {{item.likeCount}}
       </span>
       <span>
         <i class="el-icon-star-off"></i>
+        {{item.starCount}}
       </span>
       <span>
         <i class="el-icon-chat-line-square"></i>
+        {{item.ansCount}}
       </span>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent , ref } from '@vue/composition-api';
-import getCurrentInstance  from 'vue';
-import API from '../../service/api';
+<script>
 
-export default defineComponent({
-  props: [
-    'item',
-  ],
-  setup(props) {
-    console.log(props);
+import API from "../../service/api";
+
+export default {
+  name: "card",
+  props:['item'],
+  data() {
     return {
+   
     };
   },
-});
+
+  mounted() {
+ 
+  },
+  computed: {
+  },
+  methods: {
+   pushRoute(url){
+      this.$router.push('/postDetail/'+url);
+    }
+  }
+};
 </script>
 
 
