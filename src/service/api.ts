@@ -90,4 +90,7 @@ API.unfollow=(params:any)=>{
 API.followList=(params:any)=>{
   return get('users/followList' , params)
 }
+API.searchUser=(params:any)=>{
+  return post('/admin/searchUser' , params)
+}
 export default API;

@@ -14,7 +14,7 @@
     <el-container>
       <el-aside width="200px">
         <el-menu
-          :default-active="'/master/users'"
+          :default-active="masterRouter"
           :router="true"
           class="el-menu-vertical-demo"
           background-color="#001529"
@@ -36,7 +36,7 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <router-view> </router-view>
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
@@ -46,6 +46,7 @@ import { defineComponent, ref } from '@vue/composition-api';
 export default defineComponent({
   name: 'master',
   setup(props) {
+    const masterRouter = ref('')
     const handleOpen = (key: any, keyPath: any) => {
       console.log(key, keyPath);
     };
@@ -55,7 +56,12 @@ export default defineComponent({
     return {
       handleOpen,
       handleClose,
+      masterRouter
     };
+  },
+  mounted() {
+      this.masterRouter = this.$route.path;
+      // console.log(this.ma)
   },
 });
 </script>
