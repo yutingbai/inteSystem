@@ -2,7 +2,7 @@
   <div id="main">
     <myHeader />
     
-    <div id="content">
+    <div id="usercontent">
       <router-view />
     </div>
     <router-view name="detail" />

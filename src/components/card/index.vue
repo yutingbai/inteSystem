@@ -1,10 +1,10 @@
 <template>
-  <div class="card">
-    <div class="titleBox" @click.prevent="pushRoute(item.id)">
+  <div class="postCard">
+    <div class="cardTitleBox" @click.prevent="pushRoute(item.id)">
       <span>{{item.title}}</span>
     </div>
-    <div class="wordBox">
-      <div class="imgBox">
+    <div class="cardwordBox">
+      <div class="imgBox" v-if="item.pic">
         <img
           :src="item.pic"
           alt="文章配图"
@@ -37,7 +37,7 @@
 import API from "../../service/api";
 
 export default {
-  name: "card",
+  name: "postCard",
   props:['item'],
   data() {
     return {
@@ -60,7 +60,7 @@ export default {
 
 
 <style lang="less" scoped>
-.card {
+.postCard {
   margin: 0 auto;
   width: 90%;
   height: 160px;
@@ -90,7 +90,7 @@ export default {
   font-size: 10px;
 }
 
-.titleBox {
+.cardTitleBox {
   float: left;
   margin-left: 5%;
   font-weight: bold;
@@ -98,8 +98,8 @@ export default {
   width: 100%;
   text-align: left;
 }
-.wordBox {
-  width: 100%;
+.cardwordBox {
+  // width: 100%;
   margin-top: 10px;
   margin-left: 5%;
   float: left;

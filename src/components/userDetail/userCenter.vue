@@ -7,7 +7,7 @@
             <a class="avatar" href="/#/user/setting">
               <img class="imgCercle" :src="user.user_pic" alt="用户头像" />
             </a>
-            <div class="title">
+            <div class="userNameBox">
               <a class="name" href="/#/user/setting">{{user.user_name}}</a>
             </div>
             <div class="info">
@@ -24,27 +24,34 @@
                     </a>
                   </div>
                 </li>
-                <!-- <li @click="displayDialog('follow',userId)">
+                <li @click="displayDialog('follow',userId)">
                   <div class="meta-block">
                     <a>
-                      <p>{{user.follow}}</p>关注 >
+                      <p>{{user.userInfo[0].folCount}}</p>关注 >
                     </a>
                   </div>
                 </li>
-                <li @click="displayDialog('fans',userId)">
+                <li>
                   <div class="meta-block">
                     <a>
-                      <p>{{user.fans}}</p>粉丝 >
+                      <p>{{user.userInfo[0].fansCount}}</p>粉丝 >
                     </a>
                   </div>
-                </li> -->
+                </li>
+                <li>
+                  <div class="meta-block">
+                    <a>
+                      <p>{{user.userInfo[0].postCount}}</p>文章 >
+                    </a>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
         </el-card>
       </div>
     </div>
-    <div id="content">
+    <div id="cenContent">
       <router-view v-if="isRouterAlive" />
     </div>
   </div>
@@ -102,7 +109,7 @@ export default {
     },
     displayDialog(type, id) {
       API.fans(type, { id: id }).then(res => {
-        this.diaCount = res.content;
+        this.diaCount = res.cenContent;
         this.dialogVisible = true;
       });
     }
@@ -152,7 +159,7 @@ export default {
   display: block;
   cursor: pointer;
 }
-.title {
+.userNameBox {
   padding: 5px 0 0 100px;
   .name {
     display: inline;
@@ -225,7 +232,7 @@ div.router-link-active path {
   margin-right: 30px;
   border-radius: 3px;
 }
-#content {
+#cenContent {
   position: absolute;
   top: 320px;
   bottom: 0px;

@@ -75,4 +75,19 @@ API.getAnsTalkList=(params:any)=>{
 API.deleAnsTalk=(params:any)=>{
   return post('users/deleAnsTalk' , params)
 }
+API.like=(params:any)=>{
+  return get('users/like' , params)
+}
+API.star=(params:any)=>{
+  return get('users/star' , params)
+}
+API.follow=(params:any)=>{
+  return get('users/follow' , params)
+}
+API.unfollow=(params:any)=>{
+  return get('users/unfollow' , params)
+}
+API.followList=(params:any)=>{
+  return get('users/followList' , params)
+}
 export default API;

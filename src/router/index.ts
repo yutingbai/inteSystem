@@ -59,14 +59,28 @@ const routes: RouteConfig[] = [
       {
         path: 'QA',
         name: 'QA',
+        redirect:'/main/QA/recommend',
+        component: () => import('../components/user/QA.vue'),
+        children:[
+          {
+            path: 'recommend',
+            name: 'recommend',
+            component: () => import('../components/user/recommend.vue'),
+          },
+          {
+            path: 'follow',
+            name: 'follow',
+            component: () => import('../components/user/follow.vue'),
+          },
+        ]
+      },
+      {
+        path: 'QA/question',
+        name: 'question',
         component: () => import('../components/user/question.vue'),
         props:  (route) => ({ query: route.query.data }),
       },
-      {
-        path: 'QA/:id',
-        name: 'QA',
-        component: () => import('../components/user/QA.vue'),
-      },
+      
       {
         path: 'store',
         name: 'store',

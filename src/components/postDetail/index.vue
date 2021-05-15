@@ -7,12 +7,16 @@
             <div class="header">
               <el-row>
                 <el-col :span="2">
-                  <div class="userHeadBox">
-                    <img class="authHead" :src="authInfo.user_pic" alt="用户头像" />
+                  <div class="countBox userHeadBox">
+                    <img
+                      class="authHead"
+                      :src="authInfo.user_pic"
+                      alt="用户头像"
+                    />
                   </div>
                 </el-col>
                 <el-col :span="3">
-                  <div class="toprouter" tag="div" to="/main">
+                  <div class="countBox toprouter" tag="div" to="/main">
                     <svg
                       t="1591078786365"
                       class="icon"
@@ -29,22 +33,36 @@
                         fill="#ea6f5a"
                       />
                     </svg>
-                    {{authInfo.user_name}}
+                    {{ authInfo.user_name }}
                   </div>
                 </el-col>
-                <el-col :span="10">
-                  <div class="titleBox">{{detail.title}}</div>
-                </el-col>
-                <el-col :span="1" class="countBox" :offset="2">
-                  <a
-                    @click="pushCount('follow',authInfo.isfollow)"
+                <el-col :span="1" class="countBox followBox">
+                  <span
+                    v-if="userId!=authInfo.user_id"
+                    @click="
+                      pushCount(
+                        authInfo.isfollow ? 'unfollow' : 'follow',
+                        authInfo.user_id,
+                        userId
+                      )
+                    "
                   >
-                   {{authInfo.isfollow}}
-                  </a>
+                    {{ authInfo.isfollow ? "已关注" : "+关注" }}
+                  </span>
                 </el-col>
-                <el-col :span="1" class="countBox" >
+                <el-col :span="12">
+                  <div class="DetailTitleBox">{{ detail.title }}</div>
+                </el-col>
+
+                <el-col :span="1" class="countBox">
                   <a
-                    @click="pushCount('like',detail.islike,detail.id,userId)"
+                    @click="
+                      pushCount(
+                        detail.islike ? 'unlike' : 'like',
+                        detail.id,
+                        userId
+                      )
+                    "
                   >
                     <svg
                       t="1591090200281"
@@ -62,12 +80,18 @@
                         :fill="detail.islike ? '#ea6f5a' : '#646464'"
                       />
                     </svg>
-                    {{detail.likeCount}}
+                    {{ detail.likeCount }}
                   </a>
                 </el-col>
                 <el-col :span="1" class="countBox">
                   <a
-                    @click="pushCount('collection',detail.isLike,detail.user_id,detail.id,detail.title,userId)"
+                    @click="
+                      pushCount(
+                        detail.isstar ? 'unstar' : 'star',
+                        detail.id,
+                        userId
+                      )
+                    "
                   >
                     <svg
                       t="1591091670249"
@@ -85,7 +109,7 @@
                         :fill="detail.isstar ? '#ea6f5a' : '#646464'"
                       />
                     </svg>
-                    {{detail.starCount}}
+                    {{ detail.starCount }}
                   </a>
                 </el-col>
                 <el-col :span="1" class="countBox">
@@ -106,13 +130,13 @@
                         fill="#ea6f5a"
                       />
                     </svg>
-                    {{detail.hot}}
+                    {{ detail.hot }}
                   </a>
-                </el-col> 
+                </el-col>
                 <el-col :span="1" class="countBox">
-                  <span @click="comment(detail.user_id,detail.id,userId)">
+                  <span >
                     <i class="el-icon-chat-dot-round"></i>
-                    {{commentCount.length}}
+                    {{ detail.ansCount }}
                   </span>
                 </el-col>
                 <el-col :span="2" class="countBox">
@@ -143,6 +167,7 @@
                 p-id="3020"
               />
             </svg>
+            top
           </span>
           <div class="content">
             <mavonEditor
@@ -155,20 +180,20 @@
           <el-card class="commentBox">
             <div slot="header" class="clearfix">
               <span>评论区</span>
-              <span @click="comment(detail.id,userId)">
+              <span>
                 <i class="el-icon-chat-dot-round"></i>
               </span>
             </div>
-            <ul v-if="commentCount.toString()!=''">
-              <li v-for="item in commentCount" :key="item.id">
-                <span class="commentContent">{{item.content}}</span>
-                <span class="commentDate">{{new Date(item.lastActiveAt).toLocaleString()}}</span>
+            <ul v-if="commentCount.toString() != ''">
+              <li class="cardBox" v-for="item in commentCount" :key="item.id">
+                <Card @getDetail="getDetail" class="commentDate" :item="item" />
               </li>
             </ul>
-            <p  class="last" style="text-align: center; color:#b4b4b4">
-              还没有评论快来抢沙发...
-              <span @click="comment(detail.user_id,detail.id,userId)">
-                <i class="el-icon-chat-dot-round"></i>
+            <p class="last" style="text-align: center; color: #b4b4b4">
+              <span @click="comment(detail.id, userId)">
+                {{
+                  detail.ansCount ? "发表我的观点…" : "还没有评论快来抢沙发…"
+                }}
               </span>
             </p>
           </el-card>
@@ -179,7 +204,7 @@
 </template>
 
 <script>
-import { constants } from "crypto";
+import Card from "../card/ansCard.vue";
 import API from "../../service/api";
 import { mapGetters } from "vuex";
 import { mavonEditor } from "mavon-editor";
@@ -188,22 +213,21 @@ export default {
   data() {
     return {
       postId: "",
-      detail: {
-      },
-      authInfo:{},
+      detail: {},
+      authInfo: {},
       upDisplay: false,
-      commentCount: []
+      commentCount: [],
     };
   },
 
-  components: { mavonEditor },
+  components: { mavonEditor, Card },
   mounted() {
     this.postId = this.$route.params.postId;
-    
+
     this.getDetail();
   },
   computed: {
-    ...mapGetters(["userName", "userId", "userHead"])
+    ...mapGetters(["userName", "userId", "userHead"]),
   },
   methods: {
     top() {
@@ -218,91 +242,131 @@ export default {
       var params = {};
       params.id = this.postId;
       params.userId = this.userId;
-      API.getPostDetail(params).then(res => {
+      API.getPostDetail(params).then((res) => {
         this.detail = res.data;
-        this.authInfo = res.data.authInfo
-        console.log(this.detail , this.authInfo );
+        this.authInfo = res.data.authInfo;
+        console.log(this.detail, this.authInfo);
       });
-      API.getAnswerList({userId:this.userId , postId:this.postId}).then(res=>{
-        this.commentCount = res.data
-      })
+      API.getAnswerList({ userId: this.userId, postId: this.postId }).then(
+        (res) => {
+          this.commentCount = res.data;
+        }
+      );
     },
     routeBack() {
       this.$router.go(-1);
     },
-    pushCount(count, type, userId, postId, summary, myId) {
-      var params = { type, userId, postId, summary, myId };
-      switch (count) {
+    pushCount(type, postId, userId) {
+      switch (type) {
         case "like":
-          API.postLike(params).then(res => {
-            if (res.code == 0) {
-              this.$message.success("success");
-              this.detail.islike = Number(!type);
-              this.detail.likeCount += type == 0 ? 1 : -1;
-            } else {
-              this.$message.error("wrong" + res.errmsg);
+          API.like({ user_id: userId, post_id: postId, type: type }).then(
+            (res) => {
+              if (res.code === 200) {
+                this.$message.success('点赞成功');
+                this.getDetail();
+              } else {
+                this.$message.error("wrong" + res.msg);
+              }
             }
-          });
+          );
           break;
-        case "collection":
-          API.postCollection(params).then(res => {
-            if (res.code == 0) {
-              this.$message.success("success");
-              this.detail.isCollection = Number(!type);
-              this.detail.joinCount += type == 0 ? 1 : -1;
-            } else {
-              this.$message.error("wrong" + res.errmsg);
+        case "unlike":
+          API.like({ user_id: userId, post_id: postId, type: type }).then(
+            (res) => {
+              if (res.code === 200) {
+                this.$message.success('取消点赞');
+                this.getDetail();
+              } else {
+                this.$message.error("wrong" + res.msg);
+              }
             }
-          });
+          );
           break;
-          case "userattachment":
-          
-          API.userattachment({fromUserId:params.myId , toUserId:params.userId}).then(res => {
-            if (res.code == 0) {
-              this.$message.success("success");
-            } else {
-              this.$message.error("wrong" + res.errmsg);
+        case "star":
+          API.star({ user_id: userId, post_id: postId, type: type }).then(
+            (res) => {
+              if (res.code === 200) {
+                this.$message.success('收藏成功');
+                this.getDetail();
+              } else {
+                this.$message.error("wrong" + res.msg);
+              }
             }
-          });
+          );
+          break;
+        case "unstar":
+          API.star({ user_id: userId, post_id: postId, type: type }).then(
+            (res) => {
+              if (res.code === 200) {
+                this.$message.success('取消收藏');
+                this.getDetail();
+              } else {
+                this.$message.error("wrong" + res.msg);
+              }
+            }
+          );
+          break;
+        case "follow":
+          API.follow({ user_id: userId, follow_id: postId }).then(
+            (res) => {
+              if (res.code === 200) {
+                this.$message.success('关注成功');
+                this.getDetail();
+              } else {
+                this.$message.error("wrong" + res.msg);
+              }
+            }
+          );
+          break;
+          case "unfollow":
+          API.unfollow({ user_id: userId, follow_id: postId }).then(
+            (res) => {
+              if (res.code === 200) {
+                this.$message.success('取关成功');
+                this.getDetail();
+              } else {
+                this.$message.error("wrong" + res.msg);
+              }
+            }
+          );
           break;
       }
     },
     comment(postId, userId) {
       var params = {
-        content: "", //内容
-        parentId: 0,
-        postId: this.postId, //文章id
-        userId: userId //被评论用户id
+        value: "", //内容
+        postId: postId, //文章id
+        userId: userId, //被评论用户id
       };
       this.$prompt("请输入你的评论", {
         confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        cancelButtonText: "取消",
       })
         .then(({ value }) => {
-          params.content = value;
-          console.log(value, params);
-          API.comment(params).then(res => {
+          params.value = value;
+          console.log(params);
+          API.pushAnswer(params).then((res) => {
             this.getDetail();
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "取消输入"
+            message: "取消输入",
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style lang="less">
+<style lang="less" scope>
 *,
 :after,
 :before {
   box-sizing: border-box;
 }
-.app-container{
+.app-container {
   box-shadow: 0 0 5px #ccc;
 }
 .login_body {
@@ -324,11 +388,11 @@ export default {
   height: 40px;
   border-radius: 50%;
 }
-.toprouter{
+.toprouter {
   height: 49px;
   line-height: 49px;
 }
-.titleBox {
+.DetailTitleBox {
   text-align: center;
   line-height: 50px;
   cursor: pointer;
@@ -355,11 +419,11 @@ export default {
   width: 80%;
   margin: 0 auto;
 }
-mavonEditor{
+mavonEditor {
   padding: 10px;
 }
 .countBox {
-  line-height: 50px;
+  line-height: 60px;
   text-align: center;
   svg {
     font-size: 1.2em;
@@ -369,11 +433,13 @@ mavonEditor{
   position: fixed;
   right: 50px;
   bottom: 50px;
-  font-size: 50px;
+  font-size: 20px;
+  color: #ea6f5a;
+  width: 20px;
 }
 .commentBox {
   position: relative;
-  top: 10px;
+  top: 20px;
   left: 0;
   width: 80%;
   margin: 0 auto;
@@ -381,16 +447,16 @@ mavonEditor{
   ul {
     list-style: none;
     li {
-      display: block;
+      position: relative;
+      overflow: hidden;
       padding: 5px 10px;
       border-bottom: 1px solid #f0f0f0;
       font-size: 14px;
       line-height: 30px;
-
-      .commentDate {
-        float: right;
-      }
     }
   }
+}
+.followBox {
+  color: #ea6f5a;
 }
 </style>

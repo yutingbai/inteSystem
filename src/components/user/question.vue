@@ -9,7 +9,7 @@
       >
         <el-menu-item index="1">搜索结果</el-menu-item>
       </el-menu>
-      <div class="content">
+      <div class="queContent">
         <div v-for="item in tableData" :key="item.id">
           <Card :item="item" />
         </div>
@@ -20,15 +20,13 @@
         <el-menu-item index="1">热门词条</el-menu-item>
       </el-menu>
       <router-link
-      tag="el-button"
-        type="primary"
-        plain
         v-for="item in keywordList"
         :key="item.id"
-        :to="`/main/QA?data=`+  item.value"
+        :to="`/main/QA/question?data=` + item.value"
       >
-        {{ item.value }}
-        <i>{{ item.hot }}</i>
+        <el-button type="primary" plain>
+          {{ item.value }} <i>{{ item.hot }}</i></el-button
+        >
       </router-link>
     </div>
   </div>
@@ -94,12 +92,12 @@ export default defineComponent({
   float: right;
   border-left: 1px solid rgb(253, 226, 226);
 }
-.content {
+.queContent {
   margin-top: 10px;
   height: calc(100% - 60px);
   overflow: scroll;
 }
-.content::-webkit-scrollbar {
+.queContent::-webkit-scrollbar {
   display: none;
 }
 </style>

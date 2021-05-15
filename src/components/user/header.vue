@@ -2,7 +2,7 @@
   <div class="outBox">
     <div class="header">
       <div class="titleBox">
-        <router-link tag="div" to="/main/QA/recommend">
+        <router-link tag="div" to="/main/QA">
           <svg
             t="1568036554935"
             class="icon"
@@ -232,7 +232,7 @@ export default defineComponent({
       this.$router.push("/join/login");
     },
     handleSelect(item){
-      this.$router.push({path:`/main/QA`,query:{data:item.value}});
+      this.$router.push({path:`/main/QA/question`,query:{data:item.value}});
     }
   },
 });
